@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить новость - Оздоровительный центр "КДМ"</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #5D8AA8;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .news-card {
+            transition: all 0.3s ease;
+        }
+        #image-preview {
+            display: none;
+            max-height: 200px;
+            object-fit: contain;
+        }
+        .file-input-label {
+            transition: all 0.3s ease;
+        }
+        .file-input-label:hover {
+            background-color: #f0f9ff;
+        }
+    </style>
+</head>
+<body class="bg-blue-50 font-sans text-gray-700">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="bg-blue-100 p-3 rounded-full mr-4">
+                        <i class="fas fa-heartbeat text-blue-600 text-2xl"></i>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-blue-800">Оздоровительный центр "КДМ"</h1>
+                </div>
+                <div class="flex space-x-1 md:space-x-4">
+                    <a href="index.html" class="nav-link px-3 py-2 text-blue-800 font-medium">Главная</a>
+                    <a href="news.html" class="nav-link px-3 py-2 text-blue-800 font-medium hidden">Новости</a>
+                    <a href="add-news.html" class="nav-link px-3 py-2 text-blue-800 font-medium active">Добавить новость</a>
+                    <a href="about.html" class="nav-link px-3 py-2 text-blue-800 font-medium">О нас</a>
+                    <a href="service.html" class="nav-link px-3 py-2 text-blue-800 font-medium">Услуги</a>
+                    <a href="contacts.html" class="nav-link px-3 py-2 text-blue-800 font-medium">Контакты</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Форма добавления новости -->
+            <div class="lg:w-1/2">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Добавить новость</h2>
+                        
+                        <form id="news-form" class="space-y-6">
+                            <div>
+                                <label for="news-title" class="block text-sm font-medium text-gray-700 mb-1">Заголовок новости</label>
+                                <input type="text" id="news-title" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                            
+                            <div>
+                                <label for="news-category" class="block text-sm font-medium text-gray-700 mb-1">Категория</label>
+                                <select id="news-category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                                    <option value="site">Сайт</option>
+                                    <option value="massage">Массаж</option>
+                                    <option value="events">События</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Изображение</label>
+                                
+                                <!-- Превью загруженного изображения -->
+                                <img id="image-preview" src="#" alt="Превью изображения" class="mb-3 w-full rounded-lg border border-gray-200">
+                                
+                                <!-- Кнопка загрузки файла -->
+                                <label for="news-image-upload" class="file-input-label flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500">
+                                    <div class="text-center">
+                                        <i class="fas fa-cloud-upload-alt text-3xl text-blue-500 mb-2"></i>
+                                        <p class="text-sm text-gray-600">
+                                            <span class="font-medium text-blue-600">Нажмите для загрузки</span> или перетащите файл
+                                        </p>
+                                        <p class="text-xs text-gray-500 mt-1">PNG, JPG, JPEG (макс. 5MB)</p>
+                                    </div>
+                                    <input id="news-image-upload" type="file" accept="image/*" class="hidden">
+                                </label>
+                                
+                                <!-- Поле для ссылки на изображение -->
+                                <div class="mt-3">
+                                    <label for="news-image-url" class="block text-sm font-medium text-gray-700 mb-1">Или укажите ссылку на изображение</label>
+                                    <input type="url" id="news-image-url" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="https://example.com/image.jpg">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="news-content" class="block text-sm font-medium text-gray-700 mb-1">Текст новости</label>
+                                <textarea id="news-content" rows="5" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required></textarea>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300 font-medium">
+                                    Опубликовать <i class="fas fa-paper-plane ml-1"></i>
+                                </button>
+                                
+                                <button type="reset" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300 font-medium" id="reset-form">
+                                    Очистить форму
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Список существующих новостей с возможностью удаления -->
+            <div class="lg:w-1/2">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Существующие новости</h2>
+                        
+                        <div class="space-y-6" id="existing-news">
+                            <!-- Новости будут добавляться здесь динамически -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsForm = document.getElementById('news-form');
+            const existingNewsContainer = document.getElementById('existing-news');
+            const imageUpload = document.getElementById('news-image-upload');
+            const imagePreview = document.getElementById('image-preview');
+            const imageUrlInput = document.getElementById('news-image-url');
+            const resetFormBtn = document.getElementById('reset-form');
+            
+            let uploadedImage = null;
+            
+            // Загрузка существующих новостей
+            function loadExistingNews() {
+                const newsList = JSON.parse(localStorage.getItem('news')) || [];
+                existingNewsContainer.innerHTML = '';
+                
+                if (newsList.length === 0) {
+                    existingNewsContainer.innerHTML = `
+                        <div class="text-center py-10">
+                            <i class="fas fa-newspaper text-5xl text-gray-300 mb-4"></i>
+                            <p class="text-xl text-gray-500">Новостей пока нет</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                newsList.forEach(news => {
+                    addNewsToExistingList(news);
+                });
+            }
+            
+            // Добавление новости в список существующих
+            function addNewsToExistingList(news) {
+                const categoryNames = {
+                    'site': 'Сайт',
+                    'massage': 'Массаж',
+                    'events': 'События'
+                };
+                
+                const categoryColors = {
+                    'site': 'red',
+                    'massage': 'blue',
+                    'events': 'green'
+                };
+                
+                const newsElement = document.createElement('div');
+                newsElement.className = 'border border-gray-200 rounded-lg p-4';
+                newsElement.dataset.id = news.id;
+                
+                newsElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">${news.title}</h3>
+                        <button class="delete-news text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                        <span class="px-2 py-1 rounded-full bg-${categoryColors[news.category]}-100 text-${categoryColors[news.category]}-800 mr-2">
+                            ${categoryNames[news.category]}
+                        </span>
+                        <span>${news.date}</span>
+                    </div>
+                    <div class="h-40 overflow-hidden rounded-lg mb-3">
+                        <img src="${news.imageUrl}" alt="${news.title}" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-gray-600 line-clamp-2">${news.content}</p>
+                `;
+                
+                // Добавляем обработчик удаления
+                newsElement.querySelector('.delete-news').addEventListener('click', () => {
+                    deleteNews(news.id);
+                });
+                
+                existingNewsContainer.prepend(newsElement);
+            }
+            
+            // Удаление новости
+            async function deleteNews(id) {
+                const ok = await (typeof showConfirm === 'function' ? showConfirm('Вы уверены, что хотите удалить эту новость?') : Promise.resolve(confirm('Вы уверены, что хотите удалить эту новость?')));
+                if (ok) {
+                    const newsList = JSON.parse(localStorage.getItem('news')) || [];
+                    const updatedNews = newsList.filter(news => news.id != id);
+                    localStorage.setItem('news', JSON.stringify(updatedNews));
+                    
+                    // Удаляем из DOM
+                    const newsElement = document.querySelector(`[data-id="${id}"]`);
+                    if (newsElement) {
+                        newsElement.classList.add('opacity-0', 'scale-95');
+                        setTimeout(() => newsElement.remove(), 300);
+                    }
+                    
+                    // Если новостей не осталось, показываем сообщение
+                    if (updatedNews.length === 0) {
+                        loadExistingNews();
+                    }
+                }
+            }
+            
+            // Обработка загрузки изображения
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Проверка размера файла (макс. 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('Файл слишком большой. Максимальный размер - 5MB.');
+                        return;
+                    }
+                    
+                    // Проверка типа файла
+                    if (!file.type.match('image.*')) {
+                        alert('Пожалуйста, выберите файл изображения.');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        imagePreview.src = event.target.result;
+                        imagePreview.style.display = 'block';
+                        uploadedImage = event.target.result;
+                        
+                        // Очищаем поле URL, если изображение загружено с компьютера
+                        imageUrlInput.value = '';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Обработка сброса формы
+            resetFormBtn.addEventListener('click', function() {
+                imagePreview.style.display = 'none';
+                imagePreview.src = '#';
+                uploadedImage = null;
+                imageUpload.value = '';
+                imageUrlInput.value = '';
+            });
+            
+            // Обработка отправки формы
+            newsForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('news-title').value;
+                const category = document.getElementById('news-category').value;
+                const content = document.getElementById('news-content').value;
+                
+                // Определяем источник изображения
+                let imageUrl;
+                if (uploadedImage) {
+                    // Используем загруженное изображение
+                    imageUrl = uploadedImage;
+                } else if (imageUrlInput.value) {
+                    // Используем URL из поля ввода
+                    imageUrl = imageUrlInput.value;
+                } else {
+                    // Используем случайное изображение по категории
+                    imageUrl = `https://source.unsplash.com/random/600x400/?${category}`;
+                }
+                
+                // Создаем объект новости
+                const newsItem = {
+                    id: Date.now(),
+                    title,
+                    category,
+                    imageUrl,
+                    content,
+                    date: new Date().toLocaleDateString('ru-RU')
+                };
+                
+                // Сохраняем в localStorage
+                const newsList = JSON.parse(localStorage.getItem('news')) || [];
+                newsList.unshift(newsItem);
+                localStorage.setItem('news', JSON.stringify(newsList));
+                
+                // Добавляем в список существующих
+                addNewsToExistingList(newsItem);
+                
+                // Очищаем форму
+                newsForm.reset();
+                imagePreview.style.display = 'none';
+                imagePreview.src = '#';
+                uploadedImage = null;
+                
+                // Показываем уведомление
+                alert('Новость успешно добавлена!');
+            });
+            
+            // Drag and drop для загрузки изображений
+            const fileInputLabel = document.querySelector('.file-input-label');
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                fileInputLabel.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                fileInputLabel.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                fileInputLabel.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                fileInputLabel.classList.add('border-blue-500', 'bg-blue-50');
+            }
+            
+            function unhighlight() {
+                fileInputLabel.classList.remove('border-blue-500', 'bg-blue-50');
+            }
+            
+            fileInputLabel.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                imageUpload.files = files;
+                
+                // Триггерим событие change для input
+                const event = new Event('change');
+                imageUpload.dispatchEvent(event);
+            }
+            
+            // Первоначальная загрузка существующих новостей
+            loadExistingNews();
+        });
+        
+        // Проверка прав доступа - только для администраторов
+        function checkAdminAccess() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            
+            if (!user) {
+                // Пользователь не авторизован
+                showAccessDenied('Для доступа к этой странице необходимо войти в систему');
+                return;
+            }
+            
+            if (user.role !== 'admin') {
+                // Пользователь не администратор
+                showAccessDenied('Доступ к этой странице разрешен только администраторам');
+                return;
+            }
+            
+            // Пользователь - администратор, показываем страницу
+            document.body.style.display = 'block';
+        }
+        
+        // Показать сообщение об отказе в доступе
+        function showAccessDenied(message) {
+            document.body.innerHTML = `
+                <div class="min-h-screen bg-blue-50 flex items-center justify-center px-4">
+                    <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+                        <div class="bg-red-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                            <i class="fas fa-lock text-red-600 text-2xl"></i>
+                        </div>
+                        <h1 class="text-2xl font-bold text-gray-800 mb-4">Доступ запрещен</h1>
+                        <p class="text-gray-600 mb-6">${message}</p>
+                        <div class="space-y-3">
+                            <a href="wrem.html" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 block">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Войти в систему
+                            </a>
+                            <a href="index.html" class="w-full bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200 block">
+                                <i class="fas fa-home mr-2"></i>На главную
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Проверяем доступ при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Скрываем содержимое страницы до проверки
+            document.body.style.display = 'none';
+            
+            // Проверяем права доступа
+            checkAdminAccess();
+        });
+    </script>
+</body>
+</html>

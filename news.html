@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Новости - Оздоровительный центр "КДМ"</title>
+    <link rel="icon" type="image/png" href="img/icon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #5D8AA8;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .news-card {
+            transition: all 0.3s ease;
+        }
+        #news-modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        #mobile-menu {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            #mobile-menu.active {
+                display: flex;
+            }
+        }
+        body {
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        
+    </style>
+</head>
+<body class="bg-blue-50 font-sans text-gray-700">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 sm:py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="bg-blue-100 p-2 rounded-full mr-2 sm:mr-3">
+                        <img src="img/1.png" alt="иконка" class="w-8 h-8 sm:w-10 sm:h-10">
+                    </div>
+                    <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-blue-800">Оздоровительный центр "КДМ"</h1>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                    <i class="fas fa-bars text-blue-800 text-xl sm:text-2xl"></i>
+                </button>
+                <nav class="hidden md:flex space-x-2 lg:space-x-4">
+                    <a href="index.html" class="nav-link px-2 py-2 text-blue-800 font-medium text-sm lg:text-base">Главная</a>
+                    <a href="news.html" class="nav-link px-2 py-2 text-blue-800 font-medium text-sm lg:text-base active hidden">Новости</a>
+                    <a href="about.html" class="nav-link px-2 py-2 text-blue-800 font-medium text-sm lg:text-base">О нас</a>
+                    <a href="gallery.html" class="nav-link px-2 py-2 text-blue-800 font-medium text-sm lg:text-base">Галерея</a>
+                    <a href="service.html" class="nav-link px-2 py-2 text-blue-800 font-medium text-sm lg:text-base">Услуги</a>
+                    <a href="contacts.html" class="nav-link px-2 py-2 text-blue-800 font-medium text-sm lg:text-base">Контакты</a>
+                </nav>
+                
+                
+            </div>
+            <nav id="mobile-menu" class="md:hidden flex-col space-y-2 mt-3">
+                <a href="index.html" class="nav-link px-3 py-2 text-blue-800 font-medium text-sm">Главная</a>
+                <a href="news.html" class="nav-link px-3 py-2 text-blue-800 font-medium text-sm active hidden">Новости</a>
+                <a href="about.html" class="nav-link px-3 py-2 text-blue-800 font-medium text-sm">О нас</a>
+                <a href="gallery.html" class="nav-link px-3 py-2 text-blue-800 font-medium text-sm">Галерея</a>
+                <a href="service.html" class="nav-link px-3 py-2 text-blue-800 font-medium text-sm">Услуги</a>
+                <a href="contacts.html" class="nav-link px-3 py-2 text-blue-800 font-medium text-sm">Контакты</a>
+                <hr class="border-gray-300">
+                
+            </nav>
+        </div>
+    </header>
+
+    <!-- Модальное окно для полного просмотра новости -->
+    <div id="news-modal" class="modal-hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-4 sm:p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 id="modal-title" class="text-lg sm:text-xl md:text-2xl font-bold text-gray-800"></h2>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-lg sm:text-xl"></i>
+                    </button>
+                </div>
+                <div id="modal-category-date" class="flex items-center text-xs sm:text-sm text-gray-500 mb-4"></div>
+                <img id="modal-image" src="" alt="" class="w-full h-48 sm:h-64 md:h-80 object-cover rounded-lg mb-4 sm:mb-6">
+                <div id="modal-content" class="text-gray-700 text-sm sm:text-base whitespace-pre-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6 sm:py-8">
+        <!-- Заголовок блока -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-8">
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-4 sm:mb-0">Новости центра</h2>
+            <div class="flex flex-wrap gap-2 sm:gap-3">
+                <button class="category-btn active px-3 sm:px-4 py-2 rounded-full bg-blue-500 text-white text-sm sm:text-base" data-category="all">Все</button>
+                <button class="category-btn px-3 sm:px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-sm sm:text-base" data-category="site">Сайт</button>
+                <button class="category-btn px-3 sm:px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-sm sm:text-base" data-category="massage">Массаж</button>
+                <button class="category-btn px-3 sm:px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-sm sm:text-base" data-category="events">События</button>
+            </div>
+        </div>
+
+        <!-- Контейнер для новостей -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" id="news-container">
+            <!-- Новости будут добавляться здесь динамически -->
+        </div>
+
+        <!-- Кнопка "Показать еще" -->
+        <div class="text-center mt-6 sm:mt-8">
+            <button id="load-more" class="px-4 sm:px-6 py-2 sm:py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-300 font-medium text-sm sm:text-base">
+                Показать еще <i class="fas fa-arrow-down ml-2"></i>
+            </button>
+        </div>
+    </main>
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsContainer = document.getElementById('news-container');
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            const newsModal = document.getElementById('news-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalCategoryDate = document.getElementById('modal-category-date');
+            const modalImage = document.getElementById('modal-image');
+            const modalContent = document.getElementById('modal-content');
+            const closeModal = document.getElementById('close-modal');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            let currentCategory = 'all';
+            let currentNews = [];
+            
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+                const icon = mobileMenuButton.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+
+            
+
+            // Загрузка новостей из localStorage
+            function loadNews() {
+                currentNews = JSON.parse(localStorage.getItem('news')) || [];
+                
+                // Если нет новостей, показываем сообщение
+                if (currentNews.length === 0) {
+                    newsContainer.innerHTML = `
+                        <div class="col-span-full text-center py-8 sm:py-10">
+                            <i class="fas fa-newspaper text-4xl sm:text-5xl text-gray-300 mb-4"></i>
+                            <p class="text-lg sm:text-xl text-gray-500">Новостей пока нет</p>
+                            
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Отображение новостей
+                renderNews(currentNews);
+            }
+            
+            // Функция отображения новостей
+            function renderNews(newsList) {
+                newsContainer.innerHTML = '';
+                
+                const filteredNews = currentCategory === 'all' 
+                    ? newsList 
+                    : newsList.filter(news => news.category === currentCategory);
+                
+                if (filteredNews.length === 0) {
+                    newsContainer.innerHTML = `
+                        <div class="col-span-full text-center py-8 sm:py-10">
+                            <i class="fas fa-search text-4xl sm:text-5xl text-gray-300 mb-4"></i>
+                            <p class="text-lg sm:text-xl text-gray-500">Новостей в этой категории нет</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                filteredNews.forEach(news => {
+                    appendNewsCard(news);
+                });
+            }
+            
+            // Функция создания карточки новости
+            function createNewsCard(news) {
+                const categoryNames = {
+                    'site': 'Сайт',
+                    'massage': 'Массаж',
+                    'events': 'События'
+                };
+                
+                const categoryColors = {
+                    'site': 'red',
+                    'massage': 'blue',
+                    'events': 'green'
+                };
+                
+                const card = document.createElement('div');
+                card.className = 'news-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300';
+                card.dataset.category = news.category;
+                card.dataset.id = news.id;
+                
+                card.innerHTML = `
+                    <div class="relative overflow-hidden h-40 sm:h-48">
+                        <img src="${news.imageUrl}" alt="${news.title}" class="news-image w-full h-full object-cover">
+                        <div class="absolute top-3 sm:top-4 left-3 sm:left-4">
+                            <span class="category-badge bg-${categoryColors[news.category]}-100 text-${categoryColors[news.category]}-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
+                                ${categoryNames[news.category]}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-4 sm:p-6">
+                        <div class="flex items-center text-gray-500 text-xs sm:text-sm mb-2 sm:mb-3">
+                            <span>${news.date}</span>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3 line-clamp-2">${news.title}</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-3">${news.content}</p>
+                        <button class="read-more px-3 sm:px-4 py-1 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300 font-medium text-xs sm:text-sm">
+                            Читать далее <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                `;
+                
+                // Добавляем обработчик для кнопки "Читать далее"
+                card.querySelector('.read-more').addEventListener('click', () => {
+                    openNewsModal(news);
+                });
+                
+                return card;
+            }
+            
+            // Функция открытия модального окна с новостью
+            function openNewsModal(news) {
+                const categoryNames = {
+                    'site': 'Сайт',
+                    'massage': 'Массаж',
+                    'events': 'События'
+                };
+                
+                modalTitle.textContent = news.title;
+                modalCategoryDate.innerHTML = `
+                    <span class="px-2 py-1 rounded-full bg-${news.category === 'site' ? 'red' : news.category === 'massage' ? 'blue' : 'green'}-100 text-${news.category === 'site' ? 'red' : news.category === 'massage' ? 'blue' : 'green'}-800 text-xs sm:text-sm font-medium mr-2">
+                        ${categoryNames[news.category]}
+                    </span>
+                    <span>${news.date}</span>
+                `;
+                modalImage.src = news.imageUrl;
+                modalImage.alt = news.title;
+                modalContent.textContent = news.content;
+                
+                newsModal.classList.remove('modal-hidden');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Функция закрытия модального окна
+            function closeNewsModal() {
+                newsModal.classList.add('modal-hidden');
+                document.body.style.overflow = 'auto';
+            }
+            
+            // Функция добавления карточки
+            function appendNewsCard(news) {
+                const card = createNewsCard(news);
+                newsContainer.appendChild(card);
+            }
+            
+            // Фильтрация по категориям
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    categoryButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-blue-500', 'text-white');
+                        btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+                    });
+                    
+                    this.classList.add('active', 'bg-blue-500', 'text-white');
+                    this.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                    
+                    currentCategory = this.getAttribute('data-category');
+                    renderNews(currentNews);
+                });
+            });
+            
+            // Кнопка "Показать еще"
+            document.getElementById('load-more').addEventListener('click', function() {
+                alert('Загрузка дополнительных новостей...');
+            });
+            
+            // Закрытие модального окна
+            closeModal.addEventListener('click', closeNewsModal);
+            newsModal.addEventListener('click', (e) => {
+                if (e.target === newsModal) {
+                    closeNewsModal();
+                }
+            });
+            
+            // Закрытие по ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !newsModal.classList.contains('modal-hidden')) {
+                    closeNewsModal();
+                }
+            });
+            
+            // Первоначальная загрузка новостей
+            loadNews();
+        });
+    </script>
+</body>
+</html>

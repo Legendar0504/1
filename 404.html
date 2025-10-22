@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена (404)</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            color: #dc3545;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .emoji {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">😕</div>
+        <h1>404</h1>
+        <h2>Страница не найдена</h2>
+        <p>Извините, но такой страницы на нашем сайте не существует. Возможно, вы ошиблись в адресе или страница была перемещена.</p>
+        <p>Вернитесь на <a href="/">главную страницу</a> или воспользуйтесь меню для навигации.</p>
+
+        <!-- Дополнительно: можно добавить поиск по сайту, если он есть -->
+        <!-- <form action="/search" method="GET">
+            <input type="text" name="q" placeholder="Поиск по сайту...">
+            <button type="submit">Искать</button>
+        </form> -->
+    </div>
+
+    <!-- Можно добавить и свой JS, например, для предложения других страниц -->
+    <script>
+        // Простой пример: показать случайную рекомендацию через 3 секунды
+        setTimeout(() => {
+            const suggestions = [
+                {title: 'Наши услуги', link: '/services.html'},
+                {title: 'Блог', link: '/blog.html'},
+                {title: 'Контакты', link: '/contacts.html'}
+            ];
+            const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+
+            const suggestionElement = document.createElement('p');
+            suggestionElement.innerHTML = `Может быть, вам интересна страница <a href="${randomSuggestion.link}">${randomSuggestion.title}</a>?`;
+            document.querySelector('.container').appendChild(suggestionElement);
+        }, 3000);
+    </script>
+</body>
+</html>
